@@ -1,0 +1,11 @@
+add_executable(example_dg_rk3_c)
+target_sources(example_dg_rk3_c PRIVATE dg_rk3_c.cpp)
+target_link_libraries(example_dg_rk3_c PRIVATE flux)
+target_compile_definitions(example_dg_rk3_c PRIVATE OUTPUT_DIR="${EXAMPLE_OUTPUT_DIR}/DG-RK3")
+zero_check_target(example_dg_rk3_c)
+
+add_executable(example_dg_rk3_v)
+target_sources(example_dg_rk3_v PRIVATE dg_rk3_v.cpp)
+target_link_libraries(example_dg_rk3_v PRIVATE flux)
+target_compile_definitions(example_dg_rk3_v PRIVATE OUTPUT_DIR="${EXAMPLE_OUTPUT_DIR}/DG-RK3")
+zero_check_target(example_dg_rk3_v)

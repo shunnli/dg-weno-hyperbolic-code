@@ -1,0 +1,11 @@
+add_executable(example_fd_rk3_weno5_c)
+target_sources(example_fd_rk3_weno5_c PRIVATE fd_rk3_weno5_c.cpp)
+target_link_libraries(example_fd_rk3_weno5_c PRIVATE flux)
+target_compile_definitions(example_fd_rk3_weno5_c PRIVATE OUTPUT_DIR="${EXAMPLE_OUTPUT_DIR}/FD-RK3-WENO5")
+zero_check_target(example_fd_rk3_weno5_c)
+
+add_executable(example_fd_rk3_weno5_v)
+target_sources(example_fd_rk3_weno5_v PRIVATE fd_rk3_weno5_v.cpp)
+target_link_libraries(example_fd_rk3_weno5_v PRIVATE flux)
+target_compile_definitions(example_fd_rk3_weno5_v PRIVATE OUTPUT_DIR="${EXAMPLE_OUTPUT_DIR}/FD-RK3-WENO5")
+zero_check_target(example_fd_rk3_weno5_v)
