@@ -6,6 +6,7 @@
 #include "solver/solver_virtual.hpp"
 
 #include "gaussquad/gausslegendre.hpp"
+#include "output_manager.hpp"
 
 using namespace flux;  // NOLINT
 using flux::solver_virtual::RK3Solver;
@@ -139,7 +140,9 @@ public:
     }
 };
 
-int main() {
+int main(int argc, char **argv) {
+    OutputManager out(parse_output_from_argv(argc, argv), "DG-RK3");
+
     size_t DG_k = 2;
     size_t gauss_k = 7;
     auto cig_o = order_test_config();
@@ -150,21 +153,21 @@ int main() {
     // no limiter
 
     auto solver1 = DGSolver{DG_k, gauss_k};
-    DG_order_test(cig_o, solver1, DG_k, OUTPUT_DIR "/order_1_v.csv");
+    DG_order_test(cig_o, solver1, DG_k, out / "order_1_v.csv");
     DG_plot_test(cfg_p, solver1, DG_k,
-                 {OUTPUT_DIR "/plot_11_v.csv", OUTPUT_DIR "/plot_12_v.csv"});
+                 {out / "plot_11_v.csv", out / "plot_12_v.csv"});
 
     // with limiter
 
     auto solver2 = DGSolverWithLimiter{DG_k, gauss_k, 0};
-    DG_order_test(cig_o, solver2, DG_k, OUTPUT_DIR "/order_2_v.csv");
+    DG_order_test(cig_o, solver2, DG_k, out / "order_2_v.csv");
     DG_plot_test(cfg_p, solver2, DG_k,
-                 {OUTPUT_DIR "/plot_21_v.csv", OUTPUT_DIR "/plot_22_v.csv"});
+                 {out / "plot_21_v.csv", out / "plot_22_v.csv"});
 
     auto solver3 = DGSolverWithLimiter{DG_k, gauss_k, 1.0};
-    DG_order_test(cig_o, solver3, DG_k, OUTPUT_DIR "/order_3_v.csv");
+    DG_order_test(cig_o, solver3, DG_k, out / "order_3_v.csv");
     DG_plot_test(cfg_p, solver3, DG_k,
-                 {OUTPUT_DIR "/plot_31_v.csv", OUTPUT_DIR "/plot_32_v.csv"});
+                 {out / "plot_31_v.csv", out / "plot_32_v.csv"});
 
     return 0;
 }

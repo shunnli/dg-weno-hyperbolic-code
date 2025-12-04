@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -130,18 +131,18 @@ inline void print_error_table(
 #endif
 
 inline void print_error_table_to_file(
-    const std::string &file_name, const std::vector<size_t> &nlist,
+    const std::filesystem::path &output_file, const std::vector<size_t> &nlist,
     const std::vector<double> &error_l1, const std::vector<double> &error_l2,
     const std::vector<double> &error_linf, const std::vector<double> &order_l1,
     const std::vector<double> &order_l2, const std::vector<double> &order_linf,
     char delimiter) {
-    if (file_name.empty()) return;
+    if (output_file.empty()) return;
 
-    std::fstream f(file_name, std::ios::out);
+    std::fstream f(output_file, std::ios::out);
 
     if (f.fail()) {
         std::cerr << "print_error_table_to_file: fail to open file "
-                  << file_name << std::endl;
+                  << output_file.generic_string() << std::endl;
         exit(1);
     }
 
@@ -150,7 +151,8 @@ inline void print_error_table_to_file(
 
     f.close();
 
-    std::cout << "print error table to file " << file_name << '\n';
+    std::cout << "print error table to file " << output_file.generic_string()
+              << '\n';
     return;
 }
 }  // namespace flux

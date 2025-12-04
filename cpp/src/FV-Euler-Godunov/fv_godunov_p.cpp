@@ -2,6 +2,8 @@
 #include "period_index.hpp"
 #include "solver/solver_template.hpp"
 
+#include "output_manager.hpp"
+
 using namespace flux;  // NOLINT
 
 struct GetDt {
@@ -49,11 +51,13 @@ auto FV_godunov_solverp() {
                                OpNull<Vec, Mesh1d>>>{};
 }
 
-int main() {
+int main(int argc, char **argv) {
+    OutputManager out(parse_output_from_argv(argc, argv), "FV-Euler-Godunov");
+
     auto solver = FV_godunov_solverp();
-    FV_order_test(order_test_config(), solver, OUTPUT_DIR "/order_p.csv");
+    FV_order_test(order_test_config(), solver, out / "order_p.csv");
     FV_plot_test(plot_config(), solver,
-                 {OUTPUT_DIR "/plot_1_p.csv", OUTPUT_DIR "/plot_2_p.csv"});
+                 {out / "plot_1_p.csv", out / "plot_2_p.csv"});
 
     return 0;
 }

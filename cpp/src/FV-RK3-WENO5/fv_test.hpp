@@ -13,7 +13,7 @@ using namespace flux;  // NOLINT
 
 template <typename SolverType>
 void FV_plot_test(Config cfg, SolverType solver,
-                  const std::vector<const char *> &filelist) {
+                  const std::vector<std::filesystem::path> &filelist) {
     double dx = 0;
 
     auto exact = [=](double x) { return cfg.exact(x, cfg.tend); };
@@ -49,7 +49,8 @@ void FV_plot_test(Config cfg, SolverType solver,
 }
 
 template <typename SolverType>
-void FV_order_test(Config cfg, SolverType solver, const char *filename) {
+void FV_order_test(Config cfg, SolverType solver,
+                   const std::filesystem::path &filename) {
     double dx = 0;
 
     auto exact = [=](double x) { return cfg.exact(x, cfg.tend); };

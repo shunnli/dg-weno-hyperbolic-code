@@ -3,6 +3,8 @@
 #include "solver/solver_crtp.hpp"
 #include "weno5.hpp"
 
+#include "output_manager.hpp"
+
 using namespace flux;                // NOLINT
 using flux::solver_crtp::RK3Solver;  // NOLINT
 
@@ -44,11 +46,13 @@ public:
     };
 };
 
-int main() {
+int main(int argc, char **argv) {
+    OutputManager out(parse_output_from_argv(argc, argv), "FV-RK3-WENO5");
+
     auto solver = FVWENO5Solver{};
-    FV_order_test(order_test_config(), solver, OUTPUT_DIR "/order_c.csv");
+    FV_order_test(order_test_config(), solver, out / "order_c.csv");
     FV_plot_test(plot_config(), solver,
-                 {OUTPUT_DIR "/plot_1_c.csv", OUTPUT_DIR "/plot_2_c.csv"});
+                 {out / "plot_1_c.csv", out / "plot_2_c.csv"});
 
     return 0;
 }

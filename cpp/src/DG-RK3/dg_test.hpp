@@ -75,7 +75,7 @@ inline auto DG_error(const std::vector<double> &uh,
 
 template <typename SolverType>
 void DG_plot_test(Config cfg, SolverType solver, size_t DG_k,
-                  const std::vector<const char *> &filelist) {
+                  const std::vector<std::filesystem::path> &filelist) {
     double dx = 0;
 
     for (size_t i = 0; i < cfg.nlist.size(); i++) {
@@ -102,11 +102,12 @@ void DG_plot_test(Config cfg, SolverType solver, size_t DG_k,
 
 template <typename SolverType>
 void DG_order_test(Config cfg, SolverType solver, size_t DG_k,
-                   const char *filename) {
+                   const std::filesystem::path &filename) {
     double dx = 0;
     size_t gauss_k = cfg.gauss_k;
 
-    auto [gauss_points, _] = gaussquad::gausslegendre(static_cast<unsigned>(gauss_k));
+    auto [gauss_points, _] =
+        gaussquad::gausslegendre(static_cast<unsigned>(gauss_k));
 
     auto &nlist = cfg.nlist;
 

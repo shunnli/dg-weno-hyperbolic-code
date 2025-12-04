@@ -3,6 +3,8 @@
 #include "solver/solver_virtual.hpp"
 #include "weno5.hpp"
 
+#include "output_manager.hpp"
+
 using namespace flux;  // NOLINT
 using flux::solver_virtual::RK3Solver;
 
@@ -57,11 +59,13 @@ public:
     }
 };
 
-int main() {
+int main(int argc, char **argv) {
+    OutputManager out(parse_output_from_argv(argc, argv), "FD-RK3-WENO5");
+
     auto solver = FDWENO5Solver{};
-    FD_order_test(order_test_config(), solver, OUTPUT_DIR "/order_v.csv");
+    FD_order_test(order_test_config(), solver, out / "order_v.csv");
     FD_plot_test(plot_config(), solver,
-                 {OUTPUT_DIR "/plot_1_v.csv", OUTPUT_DIR "/plot_2_v.csv"});
+                 {out / "plot_1_v.csv", out / "plot_2_v.csv"});
 
     return 0;
 }

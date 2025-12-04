@@ -2,6 +2,8 @@
 #include "period_index.hpp"
 #include "solver/solver_stdfunc.hpp"
 
+#include "output_manager.hpp"
+
 using namespace flux;  // NOLINT
 using flux::solver_stdfunc::Solver;
 using flux::solver_stdfunc::UpdaterFactory;
@@ -46,11 +48,13 @@ auto FV_godunov_solver() {
     return solver.set_update(euler_updater);
 }
 
-int main() {
+int main(int argc, char **argv) {
+    OutputManager out(parse_output_from_argv(argc, argv), "FV-Euler-Godunov");
+
     auto solver = FV_godunov_solver();
-    FV_order_test(order_test_config(), solver, OUTPUT_DIR "/order_f.csv");
+    FV_order_test(order_test_config(), solver, out / "order_f.csv");
     FV_plot_test(plot_config(), solver,
-                 {OUTPUT_DIR "/plot_1_f.csv", OUTPUT_DIR "/plot_2_f.csv"});
+                 {out / "plot_1_f.csv", out / "plot_2_f.csv"});
 
     return 0;
 }

@@ -10,7 +10,7 @@ using namespace flux;  // NOLINT
 
 template <typename SolverType>
 void FD_plot_test(Config cfg, SolverType solver,
-                  const std::vector<const char *> &filelist) {
+                  const std::vector<std::filesystem::path> &filelist) {
     double dx = 0;
 
     for (size_t i = 0; i < cfg.nlist.size(); i++) {
@@ -31,7 +31,8 @@ void FD_plot_test(Config cfg, SolverType solver,
 }
 
 template <typename SolverType>
-void FD_order_test(Config cfg, SolverType solver, const char *filename) {
+void FD_order_test(Config cfg, SolverType solver,
+                   const std::filesystem::path &filename) {
     double dx = 0;
 
     auto error_l1 = std::vector<double>(cfg.nlist.size());

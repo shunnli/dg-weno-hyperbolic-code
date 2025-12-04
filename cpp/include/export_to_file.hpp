@@ -1,21 +1,21 @@
 #pragma once
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <vector>
 
 namespace flux {
-inline void export_to_file(const std::string &file_name,
+inline void export_to_file(const std::filesystem::path &output_file,
                            const std::vector<double> &x,
                            const std::vector<double> &y, char delimiter) {
-    if (file_name.empty()) return;
+    if (output_file.empty()) return;
 
-    std::fstream f(file_name, std::ios::out);
+    std::fstream f(output_file, std::ios::out);
 
     if (f.fail()) {
-        std::cerr << "export_to_file: fail to open file " << file_name
-                  << std::endl;
+        std::cerr << "export_to_file: fail to open file "
+                  << output_file.generic_string() << std::endl;
         exit(1);
     }
 
@@ -28,21 +28,21 @@ inline void export_to_file(const std::string &file_name,
 
     f.close();
 
-    std::cout << "export to file " << file_name << '\n';
+    std::cout << "export to file " << output_file.generic_string() << '\n';
     return;
 }
 
-inline void export_to_file(const std::string &file_name,
+inline void export_to_file(const std::filesystem::path &output_file,
                            const std::vector<double> &x,
                            const std::vector<double> &y,
                            const std::vector<double> &z, char delimiter) {
-    if (file_name.empty()) return;
+    if (output_file.empty()) return;
 
-    std::fstream f(file_name, std::ios::out);
+    std::fstream f(output_file, std::ios::out);
 
     if (f.fail()) {
-        std::cerr << "export_to_file: fail to open file " << file_name
-                  << std::endl;
+        std::cerr << "export_to_file: fail to open file "
+                  << output_file.generic_string() << std::endl;
         exit(1);
     }
 
@@ -56,7 +56,7 @@ inline void export_to_file(const std::string &file_name,
     }
 
     f.close();
-    std::cout << "export to file " << file_name << '\n';
+    std::cout << "export to file " << output_file.generic_string() << '\n';
     return;
 }
 }  // namespace flux
