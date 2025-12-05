@@ -47,9 +47,11 @@ message(STATUS "HAS_DEDUCING_THIS = ${HAS_DEDUCING_THIS}")
 message(STATUS "HAS_STD_FORMAT    = ${HAS_STD_FORMAT}")
 message(STATUS "HAS_STD_EXPECTED  = ${HAS_STD_EXPECTED}")
 
+add_subdirectory(gaussquad)
+
 add_library(flux INTERFACE)
 target_include_directories(flux INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(flux INTERFACE gaussquad::gaussquad)
 zero_check_target(flux)
 
-set(EXAMPLE_OUTPUT_DIR ${PROJECT_SOURCE_DIR}/output)
 add_subdirectory(src)
