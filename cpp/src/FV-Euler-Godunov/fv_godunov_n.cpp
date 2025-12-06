@@ -47,7 +47,8 @@ public:
 };
 
 int main(int argc, char **argv) {
-    OutputManager out(parse_output_from_argv(argc, argv), "FV-Euler-Godunov");
+    auto output_path = OutputManager::parse_output(argc, argv);
+    const auto out = OutputManager(output_path.value_or("outputs"), "FV-Euler-Godunov");
 
     auto solver = FVGodunovSolver{};
     FV_order_test(order_test_config(), solver, out / "order_n.csv");

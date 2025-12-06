@@ -141,7 +141,8 @@ public:
 };
 
 int main(int argc, char **argv) {
-    OutputManager out(parse_output_from_argv(argc, argv), "DG-RK3");
+    auto output_path = OutputManager::parse_output(argc, argv);
+    const auto out = OutputManager(output_path.value_or("outputs"), "DG-RK3");
 
     size_t DG_k = 2;
     size_t gauss_k = 7;

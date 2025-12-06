@@ -60,7 +60,8 @@ public:
 };
 
 int main(int argc, char **argv) {
-    OutputManager out(parse_output_from_argv(argc, argv), "FD-RK3-WENO5");
+    auto output_path = OutputManager::parse_output(argc, argv);
+    const auto out = OutputManager(output_path.value_or("outputs"), "FD-RK3-WENO5");
 
     auto solver = FDWENO5Solver{};
     FD_order_test(order_test_config(), solver, out / "order_v.csv");
