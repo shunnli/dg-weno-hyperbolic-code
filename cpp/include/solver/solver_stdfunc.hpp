@@ -51,7 +51,7 @@ public:
 
     static auto get_euler_updater(OpFunc op_L, DtFunc get_dt,
                                   OpFunc pre_process, OpFunc post_process)
-        -> Solver<VarType, ExType>::UpdateFunc {
+        -> typename Solver<VarType, ExType>::UpdateFunc {
         auto no_op = [](const VarType &var, ExType &ex, double t) {
             return var;
         };
@@ -79,7 +79,7 @@ public:
 
     static auto get_rk3_updater(
         OpFunc op_L, DtFunc get_dt, OpFunc pre_process, OpFunc post_process,
-        OpFunc post_process_rk_stage) -> Solver<VarType, ExType>::UpdateFunc {
+        OpFunc post_process_rk_stage) -> typename Solver<VarType, ExType>::UpdateFunc {
         auto no_op = [](const VarType &var, ExType &ex, double t) {
             return var;
         };
