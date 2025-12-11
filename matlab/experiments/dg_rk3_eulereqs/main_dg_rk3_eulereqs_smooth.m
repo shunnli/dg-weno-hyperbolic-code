@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 alpha = 1;
 beta = 0.2;
@@ -57,8 +58,8 @@ exact_ref_func = @(s) eulereqs_sin_exact(s, t2, alpha, beta, omega, phi, u0_ic, 
 % u_exact_ref = dg_projection_eqs(exact_ref_func, x_ref, dx_ref, pk, gk, basis, dim);
 [rho_values_ref, ~, ~] = exact_ref_func(x_ref);
 
-figure;
-hold on
+figure();
+hold('on');
 plot(x_ref, rho_values_ref, DisplayName = 'rho-ref')
 
 for w = 1:2
@@ -73,8 +74,10 @@ for w = 1:2
     plot(x, v' * uh(1:(pk + 1), :), DisplayName = sprintf('rhoh (n=%d)', nxlist2(w)))
 end
 
-hold off
-legend('Location', 'best');
+hold('off');
+box('on');
+legend(Location = 'best');
+exportgraphics(gcf, 'result_smooth.png', Resolution = 600);
 
 function [v1, v2, v3] = eulereqs_sin_exact(x, t, alpha, beta, omega, phi, u0, p0)
     % v = [v1, v2, v3] = [rho, rho u, E]

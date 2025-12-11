@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 xleft = -2;
 xright = 2;
@@ -52,11 +53,11 @@ for w = 1:2
     primitive_ref = {rho_values_ref, u_values_ref, p_values_ref, e_values_ref};
     names = {'Density', 'Velocity', 'Pressure', 'Internal Energy'};
 
-    figure;
+    figure();
 
     for s = 1:4
         subplot(2, 2, s);
-        hold on
+        hold('on');
 
         q_ref = primitive_ref{s};
         plot(x, q_ref, 'b', DisplayName = 'u-ref');
@@ -69,11 +70,13 @@ for w = 1:2
         qdiff = qmax - qmin;
         ylim([qmin - 0.1 * qdiff, qmax + 0.1 * qdiff]);
 
-        hold off
+        hold('off');
+        box('on');
         title(names{s});
-        legend('Location', 'best');
+        % legend(Location = 'best');
     end
 
+    exportgraphics(gcf, sprintf('result_riemann_%d.png', w), Resolution = 600);
 end
 
 function [v1, v2, v3] = eulereqs_riemann_init(x, rho_l, u_l, p_l, rho_r, u_r, p_r)

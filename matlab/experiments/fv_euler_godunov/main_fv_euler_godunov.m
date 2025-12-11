@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 alpha = 0.5;
 beta = 1;
@@ -45,8 +46,8 @@ nx_ref = 320;
 exact_func = @(s) burgers_sin_exact(s, t2, alpha, beta);
 u_exact_ref = Quad().integrate(exact_func, x_ref - dx_ref / 2, x_ref + dx_ref / 2) / dx_ref;
 
-figure;
-hold on
+figure();
+hold('on');
 plot(x_ref, u_exact_ref, DisplayName = 'u-ref')
 
 for w = 1:2
@@ -59,8 +60,10 @@ for w = 1:2
     plot(x, uh, DisplayName = sprintf('uh (n=%d)', nxlist2(w)))
 end
 
-hold off
-legend('Location', 'best');
+hold('off');
+box('on');
+legend(Location = 'best');
+exportgraphics(gcf, 'result.png', Resolution = 600);
 
 function result = burgers_fhat_godunov(ul, ur, ~)
     result = zeros(size(ul));

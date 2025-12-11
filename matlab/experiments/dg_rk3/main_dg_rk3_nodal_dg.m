@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 alpha = 0.5;
 beta = 1;
@@ -55,8 +56,8 @@ nx_ref = 320;
 exact_ref_func = @(s) burgers_sin_exact(s, t2, alpha, beta);
 % u_exact_ref = dg_projection(exact_ref_func, x_ref, dx_ref, pk, gk, basis);
 
-figure;
-hold on
+figure();
+hold('on');
 plot(x_ref, exact_ref_func(x_ref), DisplayName = 'u-ref')
 
 for w = 1:2
@@ -71,8 +72,10 @@ for w = 1:2
     plot(x, v' * uh, DisplayName = sprintf('uh (n=%d)', nxlist2(w)))
 end
 
-hold off
-legend('Location', 'best');
+hold('off');
+box('on');
+legend(Location = 'best');
+exportgraphics(gcf, 'result_nodal.png', Resolution = 600);
 
 function result = burgers_df(u)
     result = u;

@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 alpha = 0.5;
 beta = 1;
@@ -53,8 +54,8 @@ for cnt = 1:numel(limiters)
     exact_func = @(s) burgers_sin_exact(s, t2, alpha, beta);
     u_exact_ref = Quad().integrate(exact_func, x_ref - dx_ref / 2, x_ref + dx_ref / 2) / dx_ref;
 
-    figure;
-    hold on
+    figure();
+    hold('on');
     plot(x_ref, u_exact_ref, DisplayName = 'u-ref')
 
     for w = 1:2
@@ -67,9 +68,11 @@ for cnt = 1:numel(limiters)
         plot(x, uh, DisplayName = sprintf('uh (n=%d)', nxlist2(w)))
     end
 
-    hold off
+    hold('off');
+    box('on');
     title(lmt_name);
-    legend('Location', 'best');
+    legend(Location = 'best');
+    exportgraphics(gcf, sprintf('result-%d.png', cnt), Resolution = 600);
 end
 
 function result = burgers_df(u)

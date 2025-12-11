@@ -5,6 +5,7 @@ close all;
 cd(fileparts(mfilename('fullpath')));
 addpath(genpath('../../base'))
 addpath('../common')
+set_groot_plot_style
 
 alpha = 0.5;
 beta = 1;
@@ -42,8 +43,8 @@ nx_ref = 320;
 
 u_exact_ref = burgers_sin_exact(x_ref, t2, alpha, beta);
 
-figure;
-hold on
+figure();
+hold('on');
 plot(x_ref, u_exact_ref, DisplayName = 'u-ref')
 
 for w = 1:2
@@ -55,8 +56,10 @@ for w = 1:2
     plot(x, uh, DisplayName = sprintf('uh (n=%d)', nxlist2(w)))
 end
 
-hold off
-legend('Location', 'best');
+hold('off');
+box('on');
+legend(Location = 'best');
+exportgraphics(gcf, 'result.png', Resolution = 600);
 
 function result = burgers_fl(u, c)
     result = u .^ 2/4 + c / 2 .* u;
