@@ -15,7 +15,7 @@ inline void export_to_file(const std::filesystem::path &output_file,
 
     if (f.fail()) {
         std::cerr << "export_to_file: fail to open file "
-                  << output_file.generic_string() << std::endl;
+                  << output_file.generic_string() << '\n';
         exit(1);
     }
 
@@ -42,7 +42,7 @@ inline void export_to_file(const std::filesystem::path &output_file,
 
     if (f.fail()) {
         std::cerr << "export_to_file: fail to open file "
-                  << output_file.generic_string() << std::endl;
+                  << output_file.generic_string() << '\n';
         exit(1);
     }
 

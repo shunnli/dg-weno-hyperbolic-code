@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "config.hpp"
 #include "legendre_polys.hpp"
 #include "linespace.hpp"
@@ -60,7 +62,7 @@ inline auto DG_error(const std::vector<double> &uh,
 
             double tmp = std::abs(uh_value - uexact_value);
 
-            if (tmp > error_linf) error_linf = tmp;
+            error_linf = std::max(tmp, error_linf);
 
             error_l1 += gauss_weights[gauss_i] * tmp * dx / 2;
 

@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "dg_test.hpp"
 
 #include "legendre_polys.hpp"
@@ -16,10 +18,11 @@ using Px = LegendrePolysDx;
 
 template <typename Derived>
 class DGSolverBase : public RK3Solver<Vec, Mesh1d, Derived> {
-public:
+private:
     DGSolverBase(size_t DG_k, size_t gauss_k)
         : m_DG_k(DG_k), m_gauss_k(gauss_k) {}
 
+public:
     double get_dt(const Vec &var, Mesh1d &ex, double t) const {
         const auto &u = var.data;
 
@@ -28,7 +31,7 @@ public:
 
         for (size_t i = 0; i < cell_num; i++) {
             double tmp = std::abs(evals<P>(u, 0, i * (m_DG_k + 1), m_DG_k + 1));
-            if (tmp > df_max) df_max = tmp;
+            df_max = std::max(tmp, df_max);
         }
 
         auto coeff = static_cast<double>(2 * m_DG_k + 1);  // DG CFL
@@ -101,6 +104,7 @@ public:
 protected:
     size_t m_DG_k;  // NOLINT
     size_t m_gauss_k;
+    friend Derived;
 };
 
 class DGSolver : public DGSolverBase<DGSolver> {

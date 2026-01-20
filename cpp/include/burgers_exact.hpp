@@ -72,7 +72,7 @@ private:
         exit(1);
     }
 
-    inline static constexpr double pi = 3.14159265358979323846;
+    static constexpr double pi = 3.14159265358979323846;
 
     const double m_a;
     const double m_b;

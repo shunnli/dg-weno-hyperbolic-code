@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "dg_test.hpp"
 
 #include "legendre_polys.hpp"
@@ -29,7 +31,7 @@ public:
 
         for (size_t i = 0; i < cell_num; i++) {
             double tmp = std::abs(evals<P>(u, 0, i * (m_DG_k + 1), m_DG_k + 1));
-            if (tmp > df_max) df_max = tmp;
+            df_max = std::max(tmp, df_max);
         }
 
         auto coeff = static_cast<double>(2 * m_DG_k + 1);  // DG CFL

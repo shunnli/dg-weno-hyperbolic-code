@@ -2,6 +2,7 @@
 #include "period_index.hpp"
 #include "solver/solver_crtp.hpp"
 #include "weno5.hpp"
+#include <algorithm>
 
 #include "output_manager.hpp"
 
@@ -14,7 +15,7 @@ public:
         double df_max = 0;
         for (const auto ui : var.data) {
             double tmp = std::abs(ui);  // df(u) = u
-            if (tmp > df_max) df_max = tmp;
+            df_max = std::max(tmp, df_max);
         }
         return std::pow(ex.dx, 5.0 / 3) / (2 * df_max);
     }
@@ -61,7 +62,8 @@ public:
 
 int main(int argc, char **argv) {
     auto output_path = OutputManager::parse_output(argc, argv);
-    const auto out = OutputManager(output_path.value_or("outputs"), "FD-RK3-WENO5");
+    const auto out =
+        OutputManager(output_path.value_or("outputs"), "FD-RK3-WENO5");
 
     auto solver = FDWENO5Solver{};
     FD_order_test(order_test_config(), solver, out / "order_c.csv");

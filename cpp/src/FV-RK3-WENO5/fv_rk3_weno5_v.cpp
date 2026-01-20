@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "fv_test.hpp"
 #include "period_index.hpp"
 #include "solver/solver_virtual.hpp"
@@ -14,7 +16,7 @@ public:
         double df_max = 0;
         for (const auto ui : var.data) {
             double tmp = std::abs(ui);  // df(u) = u
-            if (tmp > df_max) df_max = tmp;
+            df_max = std::max(tmp, df_max);
         }
         return std::pow(ex.dx, 5.0 / 3) / (2 * df_max);
     }
@@ -48,7 +50,8 @@ public:
 
 int main(int argc, char **argv) {
     auto output_path = OutputManager::parse_output(argc, argv);
-    const auto out = OutputManager(output_path.value_or("outputs"), "FV-RK3-WENO5");
+    const auto out =
+        OutputManager(output_path.value_or("outputs"), "FV-RK3-WENO5");
 
     auto solver = FVWENO5Solver{};
     FV_order_test(order_test_config(), solver, out / "order_v.csv");

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <filesystem>
@@ -23,17 +24,14 @@ inline double error(const std::vector<double> &u1,
                     ErrorType error_type) {
     size_t len = u1.size();
     if (u2.size() != len) {
-        std::cerr << "error: u1 and u2 have different length" << std::endl;
+        std::cerr << "error: u1 and u2 have different length\n";
         exit(1);
     }
 
     double result = 0;
     for (size_t i = 0; i < len; ++i) {
         double tmp = std::abs(u1[i] - u2[i]);
-
-        if (error_type == ErrorType::Linf) {
-            if (tmp > result) result = tmp;
-        }
+        if (error_type == ErrorType::Linf) { result = std::max(tmp, result); }
 
         if (error_type == ErrorType::L1) { result += tmp * dx; }
 
@@ -49,12 +47,12 @@ inline std::vector<double> order(const std::vector<double> &error,
                                  const std::vector<size_t> &nlist) {
     auto len = error.size();
     if (nlist.size() != len) {
-        std::cerr << "order: Length of nlist must be equal to length of errors"
-                  << std::endl;
+        std::cerr
+            << "order: Length of nlist must be equal to length of errors\n";
         exit(1);
     }
     if (len <= 1) {
-        std::cerr << "order: n must be greater than 1" << std::endl;
+        std::cerr << "order: n must be greater than 1\n";
         exit(1);
     }
 
@@ -94,7 +92,7 @@ inline void print_error_table(
         out << row;
     }
 
-    out << std::endl;
+    out << '\n';
     return;
 }
 
@@ -124,7 +122,7 @@ inline void print_error_table(
             << std::setprecision(2) << order_linf[i] << "\n";
     }
 
-    out << std::endl;
+    out << '\n';
     return;
 }
 
@@ -142,7 +140,7 @@ inline void print_error_table_to_file(
 
     if (f.fail()) {
         std::cerr << "print_error_table_to_file: fail to open file "
-                  << output_file.generic_string() << std::endl;
+                  << output_file.generic_string() << '\n';
         exit(1);
     }
 
