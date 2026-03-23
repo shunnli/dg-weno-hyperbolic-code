@@ -1,6 +1,4 @@
-add_executable(gaussquad_test)
-zero_get_files(tmp .)
-target_sources(gaussquad_test PRIVATE ${tmp})
+add_executable(gaussquad_test gaussquad_test.cpp)
 target_link_libraries(gaussquad_test PRIVATE gaussquad gtest_main)
 
 include(GoogleTest)

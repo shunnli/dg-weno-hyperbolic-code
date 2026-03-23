@@ -1,9 +1,9 @@
 add_executable(example_dg_rk3_c)
 target_sources(example_dg_rk3_c PRIVATE dg_rk3_c.cpp)
 target_link_libraries(example_dg_rk3_c PRIVATE flux)
-zero_check_target(example_dg_rk3_c)
+check_target(example_dg_rk3_c)
 
 add_executable(example_dg_rk3_v)
 target_sources(example_dg_rk3_v PRIVATE dg_rk3_v.cpp)
 target_link_libraries(example_dg_rk3_v PRIVATE flux)
-zero_check_target(example_dg_rk3_v)
+check_target(example_dg_rk3_v)

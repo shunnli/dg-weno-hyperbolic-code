@@ -1,10 +1,10 @@
 add_executable(example_fv_rk3_weno5_c)
 target_sources(example_fv_rk3_weno5_c PRIVATE fv_rk3_weno5_c.cpp)
 target_link_libraries(example_fv_rk3_weno5_c PRIVATE flux)
-zero_check_target(example_fv_rk3_weno5_c)
+check_target(example_fv_rk3_weno5_c)
 
 
 add_executable(example_fv_rk3_weno5_v)
 target_sources(example_fv_rk3_weno5_v PRIVATE fv_rk3_weno5_v.cpp)
 target_link_libraries(example_fv_rk3_weno5_v PRIVATE flux)
-zero_check_target(example_fv_rk3_weno5_v)
+check_target(example_fv_rk3_weno5_v)
