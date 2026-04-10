@@ -16,7 +16,7 @@ function [rho_out, u_out, p_out, more_info] = euler_riemann_exact( ...
     %   gamma  - Specific heat ratio (= 1.4)
     %   xlist  - Array of spatial positions
     %   x_c    - Contact discontinuity location
-    %   t      - Time at which to compute the solution
+    %   t      - Time at which to compute the solution (must be non-negative)
     %
     % OUTPUT:
     %   rho_out - Density distribution at given positions, same size as xlist
@@ -27,16 +27,21 @@ function [rho_out, u_out, p_out, more_info] = euler_riemann_exact( ...
     %               - Wave speeds (w_1_l, w_1_r, w_2, w_3_l, w_3_r)
     %               - Wave types (shock or rarefaction)
 
-    assert(isnumeric(rho_l) && isscalar(rho_l) && rho_l > 0, 'rho_l must be positive.');
-    assert(isnumeric(u_l) && isscalar(u_l), 'u_l must be a scalar.');
-    assert(isnumeric(p_l) && isscalar(p_l) && p_l > 0, 'p_l must be positive.');
-    assert(isnumeric(rho_r) && isscalar(rho_r) && rho_r > 0, 'rho_r must be positive.');
-    assert(isnumeric(u_r) && isscalar(u_r), 'u_r must be a scalar.');
-    assert(isnumeric(p_r) && isscalar(p_r) && p_r > 0, 'p_r must be positive.');
-    assert(isnumeric(gamma) && isscalar(gamma) && gamma > 1, 'gamma must be greater than 1.');
-    assert(isnumeric(xlist) && isvector(xlist), 'xlist must be a vector.');
-    assert(isnumeric(x_c) && isscalar(x_c), 'x_c must be a scalar.');
-    assert(isnumeric(t) && isscalar(t) && t >= 0, 't must be non-negative.');
+    arguments
+        rho_l (1, 1) double {mustBePositive}
+        u_l (1, 1) double
+        p_l (1, 1) double {mustBePositive}
+
+        rho_r (1, 1) double {mustBePositive}
+        u_r (1, 1) double
+        p_r (1, 1) double {mustBePositive}
+
+        gamma (1, 1) double {mustBeGreaterThan(gamma, 1)}
+        xlist double {mustBeVector}
+        x_c (1, 1) double
+
+        t (1, 1) double {mustBeNonnegative}
+    end
 
     % Compute the sound speeds in the left and right states
     c_l = sqrt(gamma * p_l / rho_l);

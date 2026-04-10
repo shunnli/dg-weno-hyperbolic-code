@@ -59,8 +59,7 @@ classdef Quad
             if ~isempty(args.nodes) && ~isempty(args.weights)
                 % Manual nodes & weights mode
 
-                assert(isequal(size(args.nodes), size(args.weights)), ...
-                'nodes and weights must have the same size.');
+                assert(isequal(size(args.nodes), size(args.weights)), 'nodes and weights must have the same size.');
 
                 obj.nodes = args.nodes(:);
                 obj.weights = args.weights(:);
@@ -108,11 +107,14 @@ classdef Quad
             %   xright = [pi, 2*pi, 3*pi];
             %   result = q.integrate(f, xleft, xright); % size = [1, 3]
 
-            assert(isa(f, 'function_handle'), 'f must be a function handle.');
-            assert(isnumeric(xleft) && isnumeric(xright), ...
-            'xleft and xright must be numeric vectors.');
-            assert(isequal(size(xleft), size(xright)), ...
-            'xleft and xright must have the same size.');
+            arguments
+                obj
+                f (1, 1) function_handle
+                xleft double
+                xright double
+            end
+
+            assert(isequal(size(xleft), size(xright)), 'xleft and xright must have the same size.');
 
             input_size = size(xleft);
             xleft = xleft(:)'; % size = [1, n]

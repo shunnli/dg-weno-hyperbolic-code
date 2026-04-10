@@ -12,12 +12,14 @@ function u = rk3_central3_scheme(u, dx, tend, fhat, df, limiter)
     % OUTPUT:
     %   u         - Numerical solution at final time.
 
-    assert(isnumeric(u) && (isvector(u) || ismatrix(u)), 'u must be a numeric vector or matrix.');
-    assert(isnumeric(dx) && isscalar(dx) && dx > 0, 'dx must be a positive scalar.');
-    assert(isnumeric(tend) && isscalar(tend) && tend > 0, 'tend must be a positive scalar.');
-    assert(isa(fhat, 'function_handle'), 'fhat must be a function handle.');
-    assert(isa(df, 'function_handle'), 'df must be a function handle.');
-    assert(isa(limiter, 'function_handle') || isequal(limiter, false), 'limiter must be a function handle or false.');
+    arguments
+        u double
+        dx (1, 1) double {mustBePositive}
+        tend (1, 1) double {mustBePositive}
+        fhat (1, 1) function_handle
+        df (1, 1) function_handle
+        limiter {mustBeFunctionHandleOrFalse}
+    end
 
     if isequal(limiter, false)
         precessor = @(ul_plus, ur_minus, ul, u, ur, dx) deal(ul_plus, ur_minus);
@@ -57,4 +59,12 @@ function result = L_op(u, dx, fhat, precessor)
     fhat_right = fhat(ur_minus, ul_plus_right);
 
     result = (-1) * (fhat_right - fhat_left) / dx;
+end
+
+function mustBeFunctionHandleOrFalse(x)
+
+    if ~(isa(x, 'function_handle') || isequal(x, false))
+        error('limiter must be a function handle or false.');
+    end
+
 end

@@ -23,19 +23,21 @@ function errors = dg_errors_eqs(uh, u, x, dx, pk, gk, basis, dim, trans)
     %            errors(3, 1) - Linf (maximum) norm error.
     %
     % NOTE:
-    %   dim == nargout(trans) == nargin(trans) == nargout(u) (not checked by assert)
+    %   dim == nargout(trans) == nargin(trans) == nargout(u) (not checked)
 
-    assert(isnumeric(uh) && ismatrix(uh), 'uh must be a numeric matrix.');
-    assert(isa(u, 'function_handle'), 'u must be a function handle.');
-    assert(isrow(x) && isnumeric(x), 'x must be a numeric row vector.');
-    assert(isscalar(dx) && dx > 0, 'dx must be a positive scalar.');
-    assert(isscalar(pk) && pk >= 0 && mod(pk, 1) == 0, 'pk must be a non-negative integer.');
-    assert(isscalar(gk) && gk > 0 && mod(gk, 1) == 0, 'gk must be a positive integer.');
-    assert(isa(basis, 'MatBase'), 'basis must be an instance of MatBase or its derived class.');
-    assert(isscalar(dim) && dim > 0 && mod(dim, 1) == 0, 'dim must be a positive integer.');
-    assert(isa(trans, 'function_handle'), 'trans must be a function handle.');
-    assert(2 * gk >= basis.funcs_num, ...
-    'numerical quadrature formula requires at least twice the number of basis functions.');
+    arguments
+        uh double
+        u (1, 1) function_handle
+        x (1, :) double
+        dx (1, 1) double {mustBePositive}
+        pk (1, 1) double {mustBeInteger, mustBeNonnegative}
+        gk (1, 1) double {mustBeInteger, mustBePositive}
+        basis (1, 1) MatBase
+        dim (1, 1) double {mustBeInteger, mustBePositive}
+        trans (1, 1) function_handle
+    end
+
+    assert(2 * gk >= basis.funcs_num, 'numerical quadrature formula requires at least twice the number of basis functions.');
 
     [points, weights] = gauss_legendre(gk);
 

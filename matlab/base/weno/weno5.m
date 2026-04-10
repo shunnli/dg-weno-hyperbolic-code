@@ -38,7 +38,9 @@ function [res_ul, res_ur] = weno5(u)
     %
     % WENO stencil: S{i} = [ I{i-2},...,I{i+2} ]
 
-    assert(size(u, 1) == 1);
+    arguments
+        u (1, :) double
+    end
 
     % linear weights
     d_l = [3.0/10; 3.0/5; 1.0/10];

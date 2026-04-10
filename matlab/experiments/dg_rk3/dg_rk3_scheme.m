@@ -3,12 +3,12 @@ function u = dg_rk3_scheme(u, dx, tend, f, fhat, df, pk, gk, basis, basis_dx, li
     %
     % INPUT:
     %   u         - Initial solution, must be a numeric vector or matrix.
-    %   dx        - Spatial step size, must be a non-negative scalar.
+    %   dx        - Spatial step size, must be a positive scalar.
     %   tend      - Final time, must be a non-negative scalar.
     %   f         - Flux function handle, defined as f(u).
     %   fhat      - Numerical flux function handle, defined as fhat(u_L, u_R, c).
     %   df        - Derivative of the flux function, defined as df(u).
-    %   pk        - Polynomial order, must be a positive integer.
+    %   pk        - Polynomial order, must be a non-negative integer.
     %   gk        - Number of Gauss quadrature points, must be a positive integer.
     %   basis     - Basis function object, must be an instance of MatBase or its subclass.
     %   basis_dx  - Derivative of the basis function object, must be an instance of MatBase or its subclass.
@@ -17,17 +17,19 @@ function u = dg_rk3_scheme(u, dx, tend, f, fhat, df, pk, gk, basis, basis_dx, li
     % OUTPUT:
     %   u         - Numerical solution at final time.
 
-    assert(isnumeric(u) && (isvector(u) || ismatrix(u)), 'u must be a numeric vector or matrix.');
-    assert(isscalar(dx) && dx >= 0, 'dx must be a non-negative scalar.');
-    assert(isscalar(tend) && tend >= 0, 'tend must be a non-negative scalar.');
-    assert(isa(f, 'function_handle'), 'f must be a function handle.');
-    assert(isa(fhat, 'function_handle'), 'fhat must be a function handle.');
-    assert(isa(df, 'function_handle'), 'df must be a function handle.');
-    assert(isnumeric(pk) && isscalar(pk) && pk >= 0 && mod(pk, 1) == 0, 'pk must be a non-negative integer.');
-    assert(isnumeric(gk) && isscalar(gk) && gk > 0 && mod(gk, 1) == 0, 'gk must be a positive integer.');
-    assert(isa(basis, 'MatBase'), 'basis must be an object of class MatBase or its subclass.');
-    assert(isa(basis_dx, 'MatBase'), 'basis_dx must be an object of class MatBase or its subclass.');
-    assert(isa(limiter, 'function_handle') || isequal(limiter, false), 'limiter must be a function handle or false.');
+    arguments
+        u double
+        dx (1, 1) double {mustBePositive}
+        tend (1, 1) double {mustBeNonnegative}
+        f (1, 1) function_handle
+        fhat (1, 1) function_handle
+        df (1, 1) function_handle
+        pk (1, 1) double {mustBeInteger, mustBeNonnegative}
+        gk (1, 1) double {mustBeInteger, mustBePositive}
+        basis (1, 1) MatBase
+        basis_dx (1, 1) MatBase
+        limiter {mustBeFunctionHandleOrFalse}
+    end
 
     assert(2 * gk >= 2 * basis.funcs_num, 'insufficient precision of numerical quadrature formula');
     [points, weights] = gauss_legendre(gk);
@@ -90,4 +92,12 @@ function result = L_op(u, dx, f, fhat, params)
     right_boundary = params.vr * fhat_r;
 
     result = params.InvMass * (main - right_boundary + left_boundary);
+end
+
+function mustBeFunctionHandleOrFalse(x)
+
+    if ~(isa(x, 'function_handle') || isequal(x, false))
+        error('limiter must be a function handle or false.');
+    end
+
 end

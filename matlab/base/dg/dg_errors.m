@@ -19,15 +19,17 @@ function errors = dg_errors(uh, u, x, dx, pk, gk, basis)
     %            errors(2, 1) - L2 norm error.
     %            errors(3, 1) - Linf (maximum) norm error.
 
-    assert(isnumeric(uh) && ismatrix(uh), 'uh must be a numeric matrix.');
-    assert(isa(u, 'function_handle'), 'u must be a function handle.');
-    assert(isrow(x) && isnumeric(x), 'x must be a numeric vector.');
-    assert(isscalar(dx) && dx > 0, 'dx must be a positive scalar.');
-    assert(isscalar(pk) && pk >= 0 && mod(pk, 1) == 0, 'pk must be a non-negative integer.');
-    assert(isscalar(gk) && gk > 0 && mod(gk, 1) == 0, 'gk must be a positive integer.');
-    assert(isa(basis, 'MatBase'), 'basis must be an instance of MatBase or its derived class.');
-    assert(2 * gk >= basis.funcs_num, ...
-    'Numerical quadrature formula requires at least twice the number of basis functions.');
+    arguments
+        uh double
+        u (1, 1) function_handle
+        x (1, :) double
+        dx (1, 1) double {mustBePositive}
+        pk (1, 1) double {mustBeInteger, mustBeNonnegative}
+        gk (1, 1) double {mustBeInteger, mustBePositive}
+        basis (1, 1) MatBase
+    end
+
+    assert(2 * gk >= basis.funcs_num, 'Numerical quadrature formula requires at least twice the number of basis functions.');
 
     [points, weights] = gauss_legendre(gk);
 

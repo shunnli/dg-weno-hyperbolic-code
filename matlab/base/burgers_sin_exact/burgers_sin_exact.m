@@ -13,10 +13,12 @@ function u = burgers_sin_exact(x, t, alpha, beta)
     % OUTPUT:
     %   u       - Solution of Burgers' equation at (x, t). size(u) == size(x)
 
-    assert(isnumeric(x), 'x must be a numeric array.');
-    assert(isnumeric(t) && isscalar(t) && t >= 0, 't must be a non-negative scalar.');
-    assert(isnumeric(alpha) && isscalar(alpha), 'alpha must be a scalar numeric value.');
-    assert(isnumeric(beta) && isscalar(beta), 'beta must be a scalar numeric value.');
+    arguments
+        x double
+        t (1, 1) double {mustBeNonnegative}
+        alpha (1, 1) double
+        beta (1, 1) double
+    end
 
     u = alpha + beta * burgers_sin_newton(x - alpha * t, beta * t);
 end

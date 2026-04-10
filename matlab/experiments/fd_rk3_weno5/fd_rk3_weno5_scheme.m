@@ -4,7 +4,7 @@ function u = fd_rk3_weno5_scheme(u, dx, tend, fl, fr, df)
     % INPUT:
     %   u         - Initial solution, must be a numeric vector or matrix.
     %   dx        - Spatial step size, must be a positive scalar.
-    %   tend      - Final time, must be a positive scalar.
+    %   tend      - Final time, must be a non-negative scalar.
     %   fl        - Left flux function handle, defined as fl(u).
     %   fr        - Right flux function handle, defined as fr(u).
     %   df        - Derivative of the flux function, defined as df(u).
@@ -12,12 +12,14 @@ function u = fd_rk3_weno5_scheme(u, dx, tend, fl, fr, df)
     % OUTPUT:
     %   u         - Numerical solution at final time.
 
-    assert(isnumeric(u) && (isvector(u) || ismatrix(u)), 'u must be a numeric vector or matrix.');
-    assert(isnumeric(dx) && isscalar(dx) && dx > 0, 'dx must be a positive scalar.');
-    assert(isnumeric(tend) && isscalar(tend) && tend > 0, 'tend must be a positive scalar.');
-    assert(isa(fl, 'function_handle'), 'fl must be a function handle.');
-    assert(isa(fr, 'function_handle'), 'fr must be a function handle.');
-    assert(isa(df, 'function_handle'), 'df must be a function handle.');
+    arguments
+        u double
+        dx (1, 1) double {mustBePositive}
+        tend (1, 1) double {mustBeNonnegative}
+        fl (1, 1) function_handle
+        fr (1, 1) function_handle
+        df (1, 1) function_handle
+    end
 
     tnow = 0;
 

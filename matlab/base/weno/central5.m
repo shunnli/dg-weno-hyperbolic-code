@@ -1,7 +1,9 @@
 function [res_ul, res_ur] = central5(u)
     % CENTRAL 5 (compare with WENO-JS 5)
 
-    assert(size(u, 1) == 1);
+    arguments
+        u (1, :) double
+    end
 
     % linear weights
     d_l = [3.0/10; 3.0/5; 1.0/10];
@@ -21,8 +23,8 @@ function [res_ul, res_ur] = central5(u)
 
     % reconstruct
     u_l = [coeff_l(1, :) * ul_mat;
-            coeff_l(2, :) * u_mat;
-            coeff_l(3, :) * ur_mat];
+           coeff_l(2, :) * u_mat;
+           coeff_l(3, :) * ur_mat];
     u_r = [coeff_r(1, :) * ul_mat;
            coeff_r(2, :) * u_mat;
            coeff_r(3, :) * ur_mat];

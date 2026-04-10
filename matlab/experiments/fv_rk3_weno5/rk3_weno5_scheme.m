@@ -11,11 +11,13 @@ function u = rk3_weno5_scheme(u, dx, tend, fhat, df)
     % OUTPUT:
     %   u         - Numerical solution at final time.
 
-    assert(isnumeric(u) && (isvector(u) || ismatrix(u)), 'u must be a numeric vector or matrix.');
-    assert(isnumeric(dx) && isscalar(dx) && dx > 0, 'dx must be a positive scalar.');
-    assert(isnumeric(tend) && isscalar(tend) && tend > 0, 'tend must be a positive scalar.');
-    assert(isa(fhat, 'function_handle'), 'fhat must be a function handle.');
-    assert(isa(df, 'function_handle'), 'df must be a function handle.');
+    arguments
+        u double
+        dx (1,1) double {mustBePositive}
+        tend (1,1) double {mustBePositive}
+        fhat (1,1) function_handle
+        df   (1,1) function_handle
+    end
 
     tnow = 0;
 
